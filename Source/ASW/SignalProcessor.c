@@ -1,0 +1,204 @@
+/**
+*   @file    ApplicationGateway
+*   @version 1.0.0
+*
+*   @brief
+*   @details
+*
+*
+*   @addtogroup
+*   @{
+*/
+/*==================================================================================================
+*   Project              :CAN and Ethernet Gateway
+*   Platform             : ARM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : NA
+*   Autosar Revision     :
+*   Autosar Conf.Variant :
+*   SW Version           : 1.0.0
+*   Build Version        : STM32F407G
+*
+*   (c) Copyright 2005-2026 Dipak Totre
+*
+*   All Rights Reserved.
+==================================================================================================*/
+/*==================================================================================================
+==================================================================================================*/
+
+
+/*==================================================================================================
+*                                         INCLUDE FILES
+* 1) system and project includes
+* 2) needed interfaces from external units
+* 3) internal and external interfaces from this unit
+==================================================================================================*/
+#include "SignalProcessor.h"
+#include "Dio_Internal.h"
+#include "Can_GeneralTypes_Cfg.h"
+
+void Input_Sensor_Data_Read(void);
+uint8 Rte_CtInput_Door_Contact_SensorData;
+uint8 Rte_CtInput_Seat_Belt_Status;
+uint8 Rte_CtInput_Child_Lock_Button;
+uint8 Rte_CtInput_Wireless_Key_ButtonLock_Unlock;
+uint8 Rte_CtInput_Turn_Indicator_Input_Sensor;
+uint8 Rte_CtInput_Window_Lifter_Control_Input;
+uint8 Rte_CtInput_Ignition_Information;
+uint8 Rte_CtInput_Car_Speed_data;
+uint8 Rte_CtInput_Turn_Indicator_State;
+static void DIO_Data_Read(void);
+static void Can_Data_Read(void);
+typedef struct
+{
+    Can_HwHandleType Hrh;
+    Can_IdType CanId;
+    uint8 CanDlc;
+    uint8 CanSduData[8];
+} CanIf_RxIndicationArgs;
+typedef enum {
+   DCU_EnginSpeed = 0
+  }EngSpeed;
+
+  typedef enum {
+     DCU_IgnStatus = 0
+    }IgnSt;
+
+    typedef enum {
+     DCU_ChildLock = 0,
+	 DCU_Wireless_Key = 1,
+	 DCU_Turn_Indicator = 2,
+     DCU_Window_Lifter =3
+    }DoorCntCmd;
+#define DCU_ENGIN_SPEED           (0U)
+#define DCU_IGN_STATUS            (1U)
+#define DCU_DOOR_CMD              (2U)
+/*==================================================================================================
+*                                       LOCAL CONSTANTS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                       LOCAL MACROS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                      FILE VERSION CHECKS
+==================================================================================================*/
+
+/*==================================================================================================
+*                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
+==================================================================================================*/
+
+
+/*==================================================================================================
+*                                       LOCAL VARIABLES
+==================================================================================================*/
+
+/*==================================================================================================
+*                                       GLOBAL CONSTANTS
+==================================================================================================*/
+
+
+/*==================================================================================================
+*                                       GLOBAL VARIABLES
+==================================================================================================*/
+CanIf_RxIndicationArgs receivedMessage[3];
+/*==================================================================================================
+*                                   LOCAL FUNCTION PROTOTYPES
+==================================================================================================*/
+
+
+/*================================================================================================*/
+
+/*==================================================================================================
+*                                       LOCAL FUNCTIONS
+==================================================================================================*/
+void Signal_Process_5ms_Task(void)
+{
+	DIO_Data_Read();
+	Can_Data_Read();
+	static uint8 Toggle_Port =0 ;
+	if (Toggle_Port == 0)
+	{
+		Toggle_Port = 1;
+		//Dio_WriteChannel(35, (Dio_LevelType)Toggle_Port);
+	}
+	else
+	{
+		Toggle_Port = 0;
+		//Dio_WriteChannel(35, (Dio_LevelType)Toggle_Port);
+	}
+
+}
+Dio_LevelType Door_Contact_Sensor =0;
+Dio_LevelType Seat_Belt_Status =0;
+static void DIO_Data_Read(void)
+{
+
+	Door_Contact_Sensor = Dio_ReadChannel(GATEWAY_DI_DOOR_CONTACT);
+	Seat_Belt_Status  = Dio_ReadChannel(GATEWAY_DI_SEAT_BELT);
+	Rte_Write_Door_Contact_Sensor_DioData(Door_Contact_Sensor);
+	Rte_Write_Belt_Status_DioData(Seat_Belt_Status);
+
+}
+
+static void Can_Data_Read(void)
+{
+	uint8 TuernIndiDat =0;
+	uint8 ChildLock =0;
+	uint8 Lock =0;
+	uint8 WLData =0;
+	uint8 Ign =0;
+	uint8 SpeedData = 0;
+	SpeedData = receivedMessage[DCU_ENGIN_SPEED].CanSduData[DCU_EnginSpeed];
+	Ign = receivedMessage[DCU_IGN_STATUS].CanSduData[DCU_IgnStatus];
+	ChildLock = receivedMessage[DCU_DOOR_CMD].CanSduData[DCU_ChildLock];
+	Lock = receivedMessage[DCU_DOOR_CMD].CanSduData[DCU_Wireless_Key];
+	TuernIndiDat = receivedMessage[DCU_DOOR_CMD].CanSduData[DCU_Turn_Indicator];
+	WLData = receivedMessage[DCU_DOOR_CMD].CanSduData[DCU_Window_Lifter];
+
+	Rte_Write_Child_Lock_Button_CAN_Data(ChildLock);
+	Rte_Write_Wireless_Key_ButtonLock_UnlockCAN_Data(Lock);
+	Rte_Write_Turn_Indicator_Input_Sensor_CAN_Data(TuernIndiDat);
+	Rte_Write_Window_Lifter_Control_Input_CAN_Data(WLData);
+
+	Rte_Write_Ignition_Information_CAN_Data(Ign);
+	Rte_Write_Car_Speed_CAN_Data(SpeedData);
+}
+
+FUNC(void, CANIF_CODE) CanIf_RxIndicationAsr403(VAR(Can_HwHandleType, AUTOMATIC) Hrh, Can_IdType CanId, uint8 CanDlc, P2CONST(uint8, AUTOMATIC, CANIF_CBK_DRV_VAR)CanSduPtr)
+{
+
+	uint8 index=0;
+	if(CanId == 0x201)
+	{
+		index = DCU_ENGIN_SPEED;         /*Engine Speed */
+
+	}
+	else if (CanId == 0x202)
+	{
+		index= DCU_IGN_STATUS;          /*Engine IGN status  */
+
+	}
+	else if (CanId == 0x203)
+	{
+		index= DCU_DOOR_CMD;           /*Door Control Command */
+	}
+	else
+	{
+		/*Do Nothing*/
+	}
+	// Store the arguments into a struct for later use
+	receivedMessage[index].Hrh = Hrh;
+	receivedMessage[index].CanId = CanId;
+	receivedMessage[index].CanDlc = CanDlc;
+
+	for (uint8 i = 0; i < CanDlc; i++)
+	{
+		receivedMessage[index].CanSduData[i] = CanSduPtr[i];
+	}
+}
+
+/** @} */

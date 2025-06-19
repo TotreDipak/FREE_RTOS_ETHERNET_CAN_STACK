@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration version="3.0">
+ <environments>
+  <compiler name="GNU GCC">
+   <properties>
+    <property type="String" name="Compiler Defines" value="-DHARRY -DSALLY" flags="0x90040049"/>
+    <property type="Directory" name="Compiler Includes" value=" $(PROJECTROOT)\Source\TessyTest, $(PROJECTROOT)\Source\TessyTest\APPLICATION_COMPONENTS\C1, $(PROJECTROOT)\Source\TessyTest\APPLICATION_COMPONENTS\C1\C1_MODULES, $(PROJECTROOT)\Source\TessyTest\APPLICATION_COMPONENTS\C2\C2_MODULES, $(PROJECTROOT)\Source\TessyTest\SomeInc," flags="0x90040049"/>
+   </properties>
+   <target name="GNU GVD">
+    <properties/>
+    <environment name="(Default)">
+     <properties>
+      <property type="File" name="Makefile Template" value="$(TESSY_SYSPATH)\templates\make\ts_make_socket.tpl" flags="0x80000079"/>
+     </properties>
+    </environment>
+   </target>
+   <target name="Eclipse CDT">
+    <properties/>
+    <environment name="(Default)">
+     <properties>
+      <property type="File" name="Makefile Template" value="$(TESSY_SYSPATH)\templates\make\ts_make_socket.tpl" flags="0x80000079"/>
+     </properties>
+    </environment>
+   </target>
+  </compiler>
+ </environments>
+</configuration>

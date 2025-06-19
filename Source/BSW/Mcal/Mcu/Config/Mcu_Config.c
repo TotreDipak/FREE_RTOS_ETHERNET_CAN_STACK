@@ -1,0 +1,195 @@
+#include <Mcu_Internal.h>
+
+
+
+PwrConfigType PWR_ConfigSet[1] =
+{
+
+		/*PwrCRConfgVal*/
+		LPDS_STOP_MODE,
+		PDDS_STOP_MODE,
+		PVDE_DISABLED,
+		PLS20V,
+		DBP_DISABLED,
+		FPDS_NOT_POWER_DOWN ,
+		VOS_SCALE_1,
+		/*PwrCSRConfgVal*/
+		EWUP_NOT_WAKEUP,
+		BRE_DISABLED
+
+};
+
+FLASHConfigType FLASH_ConfigSet[1]=
+{
+
+		/*FLASHACRConfgVal*/
+		LATENCY_FIVE_STATE,
+		PRFTEN_ENABLED,
+		ICEN_ENABLED,
+		DCEN_ENABLED,
+		ICRST_NOT_RESET,
+		DCRST_NOT_RESET
+
+};
+
+McuClockConfigType Mcu_ClockConfigSet[1] =
+{
+		/*Mcu_ClockConfigSet-1*/
+
+				 /*McuCRConfgVal*/
+		              /*HSION    */
+					   HSION_OFF,
+					  /*HSITRIM  */
+					  HSITRIM_DEFAULT,
+					  /*HSEON    */
+					  HSE_ON,
+					/*HSEBYP   */
+					  HSEBYP_OFF,
+					   /*CSSON    */
+					   	CSS_OFF,
+						/*PLLON    */
+						PLL_ON,
+						/*PLLI2SON */
+						PLLI2S_OFF,
+
+
+				 /*McuPLLCFGRConfgVal*/
+						/*PLLM*/
+						PLLM_3,
+						/*PLLN*/
+						PLLN_336,
+						/*PLLP*/
+						PLLP_2,
+						/*PLLSRC_HSE*/
+						PLLSRC_HSE,
+						/*PLLQ*/
+						PLLQ_4,
+
+						/*McuCFGRConfgVal*/
+						SW_PLL,
+						HRPE_SYSCLK_1,
+						PRE1_AHB_8,
+						PRE2_AHB_2,
+						RTC_PREHSE_1,
+						MCO1_HSE,
+						I2SSRC_PLL,
+						MCO1PRE_2,
+						MCO2PRE_2,
+						MCO2_SYSCLK,
+
+				/*McuCIRConfgVal*/
+
+						LSIRDYIEI_DISABLED,
+						LSERDYIEI_DISABLED,
+						HSIRDYIEI_DISABLED,
+						HSERDYIEI_DISABLED,
+						PLLRDYIELI_DISABLED,
+						PLLI2SRDYIELI_DISABLED,
+
+				/*McuAHB1ENRConfgVal*/
+
+						GPIOAEN_DISABLED,
+						GPIOBEN_DISABLED,
+						GPIOCEN_ENABLED,
+						GPIODEN_ENABLED,
+						GPIOEEN_DISABLED,
+						GPIOFEN_DISABLED,
+						GPIOGEN_DISABLED,
+						GPIOHEN_DISABLED,
+						GPIOIEN_DISABLED,
+						CRCEN_DISABLED,
+						BKPSRAMEN_DISABLED,
+						CCMDATARAMEN_ENABLED,
+						DMA1EN_DISABLED,
+						DMA2EN_DISABLED,
+						ETHMACEN_DISABLED,
+						ETHMACTXEN_DISABLED,
+						ETHMACRXEN_DISABLED,
+						ETHMACPTPEN_DISABLED,
+						OTGHSEN_DISABLED,
+						OTGHSULPIEN_DISABLED,
+
+				/*McuAHB2ENRConfgVal*/
+
+				        DCMIEN_DISABLED,
+						CRYPEN_DISABLED,
+						HASHEN_DISABLED,
+						RNGEN_DISABLED,
+						OTGFSEN_DISABLED,
+
+				/*McuAHB3ENRConfgVal*/
+						FSMCEN_DISABLED,
+
+				/*McuAPB1ENRConfgVal*/
+				        TIM2EN_ENABLED,
+						TIM3EN_ENABLED,
+						TIM4EN_DISABLED,
+						TIM5EN_DISABLED,
+						TIM6EN_DISABLED,
+						TIM7EN_DISABLED,
+						TIM12EN_DISABLED,
+						TIM13EN_DISABLED,
+						TIM14EN_DISABLED,
+						WWDGEN_DISABLED,
+						SPI2EN_DISABLED,
+						SPI3EN_DISABLED,
+						USART2EN_DISABLED,
+						USART3EN_DISABLED,
+						UART4EN_DISABLED,
+						UART5EN_DISABLED,
+						I2C1EN_DISABLED,
+						I2C2EN_DISABLED,
+						I2C3EN_DISABLED,
+						CAN1EN_ENABLED,
+						CAN2EN_DISABLED,
+						PWREN_ENABLED,
+						DACEN_DISABLED,
+
+				/*McuAPB2ENRConfgVal*/
+						TIM1EN_DISABLED,
+						TIM8EN_DISABLED,
+						USART1EN_DISABLED,
+						USART6EN_DISABLED,
+						ADC3EN_DISABLED,
+						SDIOEN_DISABLED,
+						SPI1EN_DISABLED,
+						SYSCFGEN_ENABLED,
+						TIM9EN_DISABLED,
+						TIM10EN_DISABLED,
+						TIM11EN_DISABLED,
+
+				/*McuBDCRConfgVal*/
+
+						LSEON_OFF,
+						LSEBYP_NOT_BYPASSED,
+						RTCSEL_NO,
+						RTCEN_CLOCK_DISABLED,
+						BDRST_RESET_NOTACTIVATED ,
+
+				/*McuCSRConfgVal*/
+
+						LSION_OFF,
+
+				/*McuSSCGRConfgVal*/
+
+						SPREADSEL_CENTRE,
+						SSCGEN_DISABLE,
+
+				/*McuPLLI2SCFGRConfgVal*/
+
+						PLLI2SN0,
+						PLLI2SR2
+
+};
+
+
+Mcu_ConfigType Mcu_ConfigSet[1]=
+{
+		{
+				&PWR_ConfigSet[0],
+
+				&Mcu_ClockConfigSet[0],
+
+				&FLASH_ConfigSet[0]
+		}
+};
