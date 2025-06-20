@@ -119,18 +119,6 @@ void Signal_Process_5ms_Task(void)
 {
 	DIO_Data_Read();
 	Can_Data_Read();
-	static uint8 Toggle_Port =0 ;
-	if (Toggle_Port == 0)
-	{
-		Toggle_Port = 1;
-		//Dio_WriteChannel(35, (Dio_LevelType)Toggle_Port);
-	}
-	else
-	{
-		Toggle_Port = 0;
-		//Dio_WriteChannel(35, (Dio_LevelType)Toggle_Port);
-	}
-
 }
 Dio_LevelType Door_Contact_Sensor =0;
 Dio_LevelType Seat_Belt_Status =0;

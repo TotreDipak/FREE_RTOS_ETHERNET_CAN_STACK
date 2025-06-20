@@ -21,7 +21,7 @@
 *   SW Version           : 1.0.0
 *   Build Version        : STM32F407G
 *
-*   (c) Copyright 2005-2026 Dipak Totre
+*   (c) Copyright 2025-2026 Dipak Totre
 *
 *   All Rights Reserved.
 ==================================================================================================*/
@@ -69,11 +69,12 @@ typedef enum {
        DCU_TURN_INDI_ACT_RIGHT = 2,
 	   DCU_TURN_INDI_ACT_LIFT_RIGHT = 3
       }TurnIndActSt;
+
 #define DCU_TURNINDI_ON           (1U)
 #define DCU_TURNINDI_OFF          (0U)
 
-#define DCU_WL_ON           (1U)
-#define DCU_WL_OFF          (0U)
+#define DCU_WL_ON                 (1U)
+#define DCU_WL_OFF                (0U)
 
 #define DCU_DOOR_CHILDLOCK_ST_LOCK           (1U)
 #define DCU_DOOR_CHILDLOCK_ST_UNLOCK         (0U)
@@ -145,33 +146,11 @@ void Gateway_10ms_Task(void)
   Actuator_WindowLifterActuator();
   Actuator_DoorLockIndicatorLed();
   Actuator_SeatBeltIndicatorLed();
-	static uint8 Toggle_Port_10ms =0 ;
-	if (Toggle_Port_10ms == 0)
-	{
-		Toggle_Port_10ms = 1;
-		//Dio_WriteChannel(33, (Dio_LevelType)Toggle_Port_10ms);
-	}
-	else
-	{
-		Toggle_Port_10ms = 0;
-		//Dio_WriteChannel(33, (Dio_LevelType)Toggle_Port_10ms);
-	}
 }
 
 void Gateway_100ms_Task(void)
 {
   SendCanDataOnBus();
-	static uint8 Toggle_Port_100ms =0 ;
-	if (Toggle_Port_100ms == 0)
-	{
-		Toggle_Port_100ms = 1;
-		//Dio_WriteChannel(32, (Dio_LevelType)Toggle_Port_100ms);
-	}
-	else
-	{
-		Toggle_Port_100ms = 0;
-		//Dio_WriteChannel(32, (Dio_LevelType)Toggle_Port_100ms);
-	}
 }
 static void Actuator_DoorOpenCloseIndicatorLed(void)
 {
@@ -256,9 +235,9 @@ static void Actuator_DoorLockIndicatorLed(void)
 	 uint8 DLCmd = 0;
 	 uint8 LCarSpeed = 0;
 	 static Dio_LevelType DoorOpenLockUnlock = DCU_LOCK_CMD_UNLOCK;
-	Rte_Read_R_Wireless_Key_ButtonLock_Unlock(&DLCmd);
-	Rte_Read_R_Child_Lock_Button(&ChildLockSt);
-	Rte_Read_R_Car_Speed_data(&LCarSpeed);
+	 Rte_Read_R_Wireless_Key_ButtonLock_Unlock(&DLCmd);
+	 Rte_Read_R_Child_Lock_Button(&ChildLockSt);
+	 Rte_Read_R_Car_Speed_data(&LCarSpeed);
       if (ChildLockSt == DCU_DOOR_CHILDLOCK_ST_UNLOCK)
       {
         if (LCarSpeed > LOCK_ON_SPEED_LIMIT)
@@ -276,7 +255,7 @@ static void Actuator_DoorLockIndicatorLed(void)
       }
       else 
       {
-        //DoorOpenLockUnlock = DCU_DOOR_CMD_LOCK; 
+    	  /*Do Nothing*/
       }
 	  Dio_WriteChannel(GATEWAY_DO_CH_LOCK_STATUS, (Dio_LevelType)DoorOpenLockUnlock);
 }
@@ -302,9 +281,9 @@ static void PackCanDataBus(uint8 *Data)
 	Rte_Read_R_Door_Contact_Sensor(&LDoorStatus);
 	Rte_Read_R_Seat_Belt_Status(&LSeatBltStatus);
 	Rte_Read_R_Turn_Indicator_State(&TunIndiActStatus);
-Data[0] = LDoorStatus;
-Data[1] = LSeatBltStatus;
-Data[2] = TunIndiActStatus;
+	Data[0] = LDoorStatus;
+	Data[1] = LSeatBltStatus;
+	Data[2] = TunIndiActStatus;
 
 }
 

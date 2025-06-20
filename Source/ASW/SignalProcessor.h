@@ -124,68 +124,7 @@ extern uint8 Rte_CtInput_Turn_Indicator_State;
 *                                             ENUMS
 ==================================================================================================*/
 
-#if 0
-typedef enum {
-   DCU_WL_UNDEFINED = 0,
-   DCU_WL_AUTO_UP = 1,
-   DCU_WL_AUTO_DOWN = 2,
-   DCU_WL_STOP =3
-  }WlSwitchSt;
 
-typedef enum {
-   DCU_WL_MODE_STOP = 0,
-   DCU_WL_MODE_RUN = 1,
-   DCU_WL_MODE_PINCH = 2,
-   DCU_WL_MODE_CHILD_LOCK = 3
-  }WlMode;
-
-typedef enum {
-   DCU_WL_ACT_UNDEFINED = 0,
-   DCU_WL_ACT_AUTO_UP = 1,
-   DCU_WL_ACT_AUTO_DOWN = 2,
-   DCU_WL_ACT_PINCH = 3,
-   DCU_WL_ACT_STOP = 4
-  }WlActSt;
-typedef enum {
-   DCU_TURN_INDI_ACT_UNKNOWN = 0,
-   DCU_TURN_INDI_ACT_OFF = 1,
-   DCU_TURN_INDI_ACT_LEFT = 2,
-   DCU_TURN_INDI_ACT_RIGHT = 3
-  }TurnIndActSt;
-
-typedef enum {
-   DCU_TURN_INDI_UNKNOWN = 0,
-   DCU_TURN_INDI_OFF = 1,
-   DCU_TURN_INDI_LEFT = 2,
-   DCU_TURN_INDI_RIGHT = 3
-  }TurnIndSt;
-
-typedef enum {
-   DCU_WL_POSION_UNKNOWN = 0,
-   DCU_WL_POSION_CLOSE = 1,
-   DCU_WL_POSION_OPEN = 2
-  }WlSensSt;
-
-typedef enum {
-   DCU_MIR_UNKNOWN = 0,
-   DCU_MIR_FOLD = 1,
-   DCU_MIR_UNFOLD = 2,
-   DCU_MIR_IDLE = 3
-  }MirFoldSt;
-
-typedef enum {
-   DCU_ST_BELT_W_UNKNOWN = 0,
-   DCU_ST_BELT_W_ON = 1,
-   DCU_ST_BELT_W_OFF = 2
-  }StBeltSt;
-
-typedef enum {
-   DCU_LOCK_ST_UNKNOWN = 0,
-   DCU_LOCK_ST_LOCK = 1,
-   DCU_LOCK_ST_UNLOCK = 2
-  }LkActSt;
-
-#endif
 /*==================================================================================================
 *                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
@@ -199,5 +138,5 @@ typedef enum {
 ==================================================================================================*/
 extern void Input_Sensor_Data_Read(void);
 extern void Signal_Process_5ms_Task(void);
-#define CanIf_RxIndication(Hrh, CanId, CanDlc, CanSduPtr)                                           CanIf_RxIndicationAsr403((Hrh), (CanId), (CanDlc), (CanSduPtr))
+#define CanIf_RxIndication(Hrh, CanId, CanDlc, CanSduPtr)   CanIf_RxIndicationAsr403((Hrh), (CanId), (CanDlc), (CanSduPtr))
 /** @} */
